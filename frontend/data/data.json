@@ -1,0 +1,24 @@
+[
+  {
+    "username": "Aman Sharma",
+    "email": "amansharmayt19@gmail.com",
+    "password": "a",
+    "uid": "cd530bc9-a175-42b5-a2d5-a5c24c547bba",
+    "createdAt": "2025-01-31T11:19:05.383Z"
+  },
+  {
+    "username": "Shristy Sharma",
+    "email": "shristysharmayt16@gmail.com",
+    "password": "s",
+    "uid": "f8e58c27-abfa-4d42-87a3-13540e8b41cb",
+    "createdAt": "2025-01-31T11:19:35.813Z"
+  },
+  {
+    "username": "scripterjs",
+    "email": "scripter@gmail.com",
+    "password": "s",
+    "uid": "52a4607a-e702-4db0-9406-a275539e9117",
+    "createdAt": "2025-01-31T15:20:00.989Z"
+  }
+  
+]

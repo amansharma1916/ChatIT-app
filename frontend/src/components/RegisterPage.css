@@ -1,0 +1,136 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+.register-container {
+  max-width: 80vw;
+  width: 100%;
+  max-height: 80vh;
+  /* min-height: 80dvh; */
+  height: 100%;
+  margin: 50px auto;
+  padding: 15px 40px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.register-container h2 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.register-container .form-group {
+  margin-bottom: 15px;
+}
+
+.register-container .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #34495e;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.register-container .form-group input {
+  width: 90%;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.register-container .form-group input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+}
+
+.register-container button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(45deg, #3498db, #9b59b6);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.register-container button[type="submit"]:hover {
+  background: linear-gradient(45deg, #9b59b6, #3498db);
+}
+
+.register-container button[type="submit"]:active {
+  transform: translateY(2px);
+}
+
+.register-container a {
+  
+  display: flex;
+  text-align: center;
+  text-decoration: none;
+  color: #3498db;
+  font-size: 1rem;
+  gap: 1rem;
+}
+
+.register-container a:hover {
+  text-decoration: underline;
+}
+
+.register-container .loginsec p,
+.register-container .adminsec p {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+/* === Mobile Specific Adjustments (Keeping Layout Same) === */
+@media (max-width: 480px) {
+  html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .register-container {
+    width: 90vw; /* Adjusted for better fit */
+    max-width: none; /* Allows it to take full width on mobile */
+    height: auto; /* Allow content to adjust height */
+    margin: 10px auto;
+    padding: 20px;
+  }
+
+  .register-container h2 {
+    font-size: 1.8rem;
+  }
+
+  .register-container .form-group input {
+    width: 100%; /* Make inputs full width */
+  }
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "uid": "f8e58c27-abfa-4d42-87a3-13540e8b41cb",
+    "username": "Shristy Sharma",
+    "email": "shristysharmayt16@gmail.com",
+    "user": "Aman Sharma"
+  },
+  {
+    "uid": "fc05d480-2275-4810-a2c3-c2953a21adc4",
+    "username": "ram",
+    "email": "ram@gmail.com",
+    "user": "Aman Sharma"
+  },
+  {
+    "uid": "ba3bd798-b5aa-445f-9f2d-789b2a1a0ba3",
+    "username": "raman",
+    "email": "raman@gmail.com",
+    "user": "Aman Sharma"
+  },
+  {
+    "uid": "52a4607a-e702-4db0-9406-a275539e9117",
+    "username": "scripterjs",
+    "email": "scripter@gmail.com",
+    "user": "Aman Sharma"
+  },
+  {
+    "uid": "cd530bc9-a175-42b5-a2d5-a5c24c547bba",
+    "username": "Aman Sharma",
+    "email": "amansharmayt19@gmail.com",
+    "user": "Shristy Sharma",
+    "chatId": "chat_undefined_and_cd530bc9-a175-42b5-a2d5-a5c24c547bba"
+  },
+  {
+    "uid": "ba3bd798-b5aa-445f-9f2d-789b2a1a0ba3",
+    "username": "raman",
+    "email": "raman@gmail.com",
+    "user": "Shristy Sharma"
+  },
+  {
+    "uid": "f8e58c27-abfa-4d42-87a3-13540e8b41cb",
+    "username": "Shristy Sharma",
+    "email": "shristysharmayt16@gmail.com",
+    "user": "raman"
+  },
+  {
+    "uid": "cd530bc9-a175-42b5-a2d5-a5c24c547bba",
+    "username": "Aman Sharma",
+    "email": "amansharmayt19@gmail.com",
+    "user": "raman"
+  }
+]

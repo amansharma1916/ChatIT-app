@@ -1,0 +1,86 @@
+/* Background Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #141e30, #243b55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* Centered Login Container */
+  .admin-login-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Form Title */
+  .admin-login-container .login-form h2 {
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Fields */
+  .admin-login-container .input-group {
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .admin-login-container .input-group input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  /* Button */
+  .admin-login-container .verify-button,.jump-button {
+    background: #ff4b2b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+  }
+  
+  .admin-login-container .login-button:hover {
+    background: #ff5733;
+  }
+  
+  .admin-login-container .status{
+    color: whitesmoke;
+  }
+  .admin-login-container .back-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: none;
+    padding: 15px 20px;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+  }
+  
+  .admin-login-container .back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }

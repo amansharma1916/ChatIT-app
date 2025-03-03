@@ -1,0 +1,160 @@
+.admin-page {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.admin-page .admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.admin-page .admin-main {
+  display: flex;
+  margin-top: 20px;
+  min-height: 60vh;
+  gap: 20px;
+}
+
+.admin-page .approved-users,
+.admin-page .pending-users,
+.admin-page .all-users {
+  flex: 1;
+  padding: 15px;
+  min-width: 20vw;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-page .approved-users h2,
+.admin-page .pending-users h2,
+.admin-page .all-users h2 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.admin-page .user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1.1rem;
+}
+
+.admin-page .user-item:last-child {
+  border-bottom: none;
+}
+
+.admin-page .remove-btn,
+.admin-page .accept-btn,
+.admin-page .reject-btn {
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.admin-page .accept-btn {
+  background-color: #8aff9d;
+  color: white;
+  height: 4.5vh;
+  width: 2.5vw;
+}
+
+.admin-page .reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.admin-page .reject-btn:hover {
+  background-color: #c82333;
+}
+
+.admin-page .remove-btn {
+  background-color: #ff5555;
+  color: white;
+}
+
+.admin-page .remove-btn:hover {
+  background-color: #e04e4e;
+}
+
+.admin-page .action-btns button {
+  margin-left: 8px;
+}
+
+/* === Mobile Specific Adjustments === */
+@media (max-width: 768px) {
+  .admin-page {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  
+
+
+  .admin-page .admin-main {
+    flex-direction: column; /* Stack sections vertically */
+    gap: 20px; /* Space between stacked sections */
+  }
+  
+  .admin-page .admin-header {
+    /* margin-top: 25rem; Clean padding for touch interaction */
+    /* margin-top: 0rem; */
+    position: sticky;
+    font-size: 1.2rem; /* Adjusted font size for touch interaction */
+  }
+
+  .admin-page .approved-users,
+  .admin-page .pending-users,
+  .admin-page .all-users {
+    width: 100%; /* Take full width on mobile */
+    padding: 20px; /* Clean padding for neat appearance */
+    border-radius: 12px; /* Rounded edges for better aesthetics */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow for separation */
+  }
+
+  .admin-page .approved-users h2,
+  .admin-page .pending-users h2,
+  .admin-page .all-users h2 {
+    font-size: 1.3rem; /* Adjusted heading size for readability */
+  }
+
+  .admin-page .user-item {
+    padding: 12px 0; /* Comfortable spacing for touch interaction */
+    font-size: 1rem;
+  }
+  .admin-page .accept-btn {
+    background-color: #8aff9d;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 0.6rem;
+    height: 35px;
+    width: 40px;
+  }
+  .admin-page .a-r-btn{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+
+  }
+}

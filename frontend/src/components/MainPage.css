@@ -1,0 +1,295 @@
+/* Minimalistic & Colorful Chat App Styles with Clean Look, Consistent Gapping, and a Sticky Logout Button */
+
+.main-container {
+  max-width: 800px;
+  cursor: pointer;
+  min-width: 15%;
+  height: 100%;
+  max-height: 80vh;
+  min-height: 80vh;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  /* background: white;  Semi-transparent white */
+  backdrop-filter: blur(8px);              /* Glass-like blur effect */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #e0e7ff;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  display: flex;
+  
+  flex-direction: column;
+  gap: 1rem;  /* Consistent gap between internal sections */
+}
+
+/* HEADER SECTION */
+.main-container .header {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  height: 1.8rem;
+  justify-content: space-between;
+  gap: 1rem;  /* Gap between header elements */
+  /* padding: 1rem; */
+  /* background: linear-gradient(135deg, #ff9a9e, #fad0c4);  Soft, colorful gradient */
+  /* border-bottom: 1px solid #e0e7ff; */
+  border-radius: 10px;
+}
+
+/* Back Button (Left) */
+.main-container .back-button {
+  background: rgba(125, 211, 252, 0.2);
+  color: #2563eb;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.main-container .back-button:hover {
+  background: rgba(125, 211, 252, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Main User Info (Centered in Header) */
+.main-container .main_user {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #000000;
+  border: 2px solid #ea00ff;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+}
+
+/* Logout Button (Right) – Made Sticky */
+.main-container .logout-button {
+  position: sticky;
+  top: 1rem;            /* Sticks 1rem from the top of the scrollable container */
+  align-self: flex-end; /* Ensure it stays at the right side in its flex container */
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(161, 140, 209, 0.3);
+  z-index: 10;
+}
+
+.main-container .logout-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(161, 140, 209, 0.5);
+}
+
+/* SEARCH SECTION */
+.main-container .search-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(240, 249, 255, 0.9);  /* Light pastel blue with transparency */
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+  border: 1px solid #e0e7ff;
+}
+
+.main-container .search-input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e0e7ff;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  background: #f9f9ff;
+  transition: all 0.3s ease;
+}
+
+.main-container .search-input:focus {
+  outline: none;
+  border-color: #7dd3fc;
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.3);
+}
+.main-container .title{
+  color: white;
+  padding-bottom: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.main-container .search-button {
+  background: linear-gradient(135deg, #7dd3fc, #60a5fa);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 0.8rem;
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(96, 165, 250, 0.3);
+}
+
+.main-container .search-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(96, 165, 250, 0.5);
+}
+
+/* CONTACTS LIST */
+.main-container .contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #fcfcff;  /* Very light background for contacts */
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+/* CONTACT ITEM */
+.main-container .contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;  /* Gap between avatar and info */
+  padding: 0.75rem;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.main-container .contact-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(125, 211, 252, 0.2);
+  border-color: #7dd3fc;
+}
+
+.main-container .contact-avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #ffb347, #ffcc33);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  box-shadow: 0 3px 6px rgba(255, 179, 71, 0.3);
+}
+
+.main-container .contact-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.main-container .contact-name {
+  font-weight: 600;
+  color: #1e293b;
+  letter-spacing: -0.25px;
+}
+
+.main-container .contact-message {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.main-container .contact-time {
+  color: #94a3b8;
+  font-size: 0.7rem;
+  min-width: 60px;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* ADD BUTTON */
+.main-container .addbtn {
+  background: linear-gradient(135deg, #fca5a5, #f87171);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.main-container .addbtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(248, 113, 113, 0.5);
+}
+
+/* FRIENDS SECTION */
+.main-container .friends {
+  padding: 1rem;
+  background-color: #f0fdf4;  /* Light mint background for friends section */
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.main-container .friend-email {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: #fff;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+}
+
+.main-container .friend-email:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 8px rgba(125, 211, 252, 0.2);
+}
+
+/* REMOVE BUTTON */
+.main-container .removebtn {
+  background: #ffe6e6;
+  color: #dc2626;
+  border: 1px solid #fee2e2;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.main-container .removebtn:hover {
+  background: #000000;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* SCROLLBAR STYLING */
+.main-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.main-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.main-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
