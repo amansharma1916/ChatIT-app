@@ -199,16 +199,19 @@
 }
 /* Compact Mobile View */
 @media (max-width: 768px) {
+    body{
+        overflow-y: hidden;
+    }
     .chat-container {
-        max-height: 70vh;
+        max-height: 70dvh;
         height: 100%;
-        min-height: 20vh;
+        min-height: 20dvh;
         margin-bottom: 9rem;
         width: 100%;
         min-width: 96vw;
         border-radius: 0;
-        font-size: 0.9rem; /* Adjust font size for smaller screens */
-        overflow-y: hidden; /* Ensure no content overflows */
+        font-size: 0.9rem; 
+        overflow-y: hidden;
         overflow-x: hidden;
         
     }
