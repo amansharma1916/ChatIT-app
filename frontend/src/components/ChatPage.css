@@ -205,14 +205,13 @@
     .chat-container {
         max-height: 70dvh;
         height: 100%;
-        min-height: 20dvh;
+        min-height: 10dvh;
         margin-bottom: 9rem;
         width: 100%;
         min-width: 96vw;
         border-radius: 0;
         font-size: 0.9rem; 
-        overflow-y: hidden;
-        overflow-x: hidden;
+        overflow: hidden;
         
     }
 
