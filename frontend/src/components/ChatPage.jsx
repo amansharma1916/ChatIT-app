@@ -8,7 +8,7 @@ const serverUrl = import.meta.env.VITE_BASE_URL;
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [LastMessage, setLastMessage] = useState("");
   const { chatId } = useParams();
   const location = useLocation();
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
@@ -17,11 +17,12 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
   const [autoScroll, setAutoScroll] = useState(true);
   const inputRef = useRef(null);
-
+  // Authentication check
   if (!localStorage.getItem("isAuthenticated")) {
     window.location.href = "/login";
   }
 
+  // Fetch messages for current chat
   const fetchMessages = async () => {
     try {
       const response = await fetch(`${serverUrl}/getMessages?chatId=${chatId}`);
@@ -33,26 +34,19 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    // Keep focus on input
-    const handleClick = (event) => {
-      const backButton = document.querySelector('.back-button');
-      if (event.target !== backButton && !backButton.contains(event.target)) {
-        event.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
+      const handleTouchStart = (event) => {
+        if (inputRef.current && event.target !== inputRef.current) {
+          event.preventDefault(); // Prevents losing focus
+        }
+      };
 
-    document.addEventListener('click', handleClick);
-    document.addEventListener('touchstart', handleClick, { passive: false });
+      document.addEventListener("touchstart", handleTouchStart, { passive: false });
 
-    // Initial focus
-    inputRef.current?.focus();
-
-    return () => {
-      document.removeEventListener('click', handleClick);
-      document.removeEventListener('touchstart', handleClick);
-    };
+      return () => {
+        document.removeEventListener("touchstart", handleTouchStart);
+      };
   }, []);
+
 
   useEffect(() => {
     fetchMessages();
@@ -60,16 +54,21 @@ const ChatPage = () => {
     return () => clearInterval(interval);
   }, [chatId]);
 
+  // Scroll to bottom only if autoScroll is enabled
   useEffect(() => {
     if (autoScroll) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
     }
   }, [messages]);
 
+  // Detect user scrolling
   const handleScroll = () => {
     const container = messagesContainerRef.current;
     if (!container) return;
+
     const { scrollTop, clientHeight, scrollHeight } = container;
+
+    // If user scrolls up, disable auto-scroll
     if (scrollHeight - scrollTop > clientHeight + 50) {
       setAutoScroll(false);
     } else {
@@ -78,9 +77,8 @@ const ChatPage = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim() || isLoading) return;
+    if (!newMessage.trim()) return;
 
-    setIsLoading(true);
     const newMsg = {
       text: newMessage,
       uid: loggedInUser.uid,
@@ -97,13 +95,12 @@ const ChatPage = () => {
 
       if (response.ok) {
         setNewMessage("");
-        await fetchMessages(); // Immediately fetch new messages
+
+        await fetchMessages();
+       
       }
     } catch (error) {
       console.error("Error adding message:", error);
-    } finally {
-      setIsLoading(false);
-      inputRef.current?.focus(); // Refocus after sending
     }
   };
 
@@ -112,16 +109,17 @@ const ChatPage = () => {
       const response = await fetch(`${serverUrl}/deleteMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatId, messageId }),
+        body: JSON.stringify({ chatId, messageId }), // Pass the messageId here
       });
 
       if (response.ok) {
+        // Fetch updated messages after deletion
         await fetchMessages();
+      } else {
+        console.error("Failed to delete message:", response.statusText);
       }
     } catch (error) {
       console.error("Error deleting message:", error);
-    } finally {
-      inputRef.current?.focus(); // Refocus after deletion
     }
   };
 
@@ -160,6 +158,7 @@ const ChatPage = () => {
             </div>
           </div>
         ))}
+
         <div ref={messagesEndRef} />
       </div>
 
@@ -173,11 +172,7 @@ const ChatPage = () => {
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
-        <button 
-          onClick={handleSendMessage} 
-          className="send-button"
-          disabled={isLoading}
-        >
+        <button onClick={handleSendMessage} className="send-button">
           <Send size={20} />
         </button>
       </div>
