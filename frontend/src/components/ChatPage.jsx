@@ -33,19 +33,14 @@ const ChatPage = () => {
     }
   };
 
+  // Fetch messages on initial load
   useEffect(() => {
-      const handleTouchStart = (event) => {
-        if (inputRef.current && event.target !== inputRef.current) {
-          event.preventDefault(); // Prevents losing focus
-        }
-      };
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 1000);
+    return () => clearInterval(interval);
+  }, [chatId]);
 
-      document.addEventListener("touchstart", handleTouchStart, { passive: false });
 
-      return () => {
-        document.removeEventListener("touchstart", handleTouchStart);
-      };
-  }, []);
 
 
   useEffect(() => {
