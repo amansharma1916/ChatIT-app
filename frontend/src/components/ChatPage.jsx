@@ -96,10 +96,7 @@ const ChatPage = () => {
       if (response.ok) {
         setNewMessage("");
 
-        await fetchMessages();
-        setTimeout(() => {
-          inputRef.current?.focus();
-        }, 0);
+       
       }
     } catch (error) {
       console.error("Error adding message:", error);
