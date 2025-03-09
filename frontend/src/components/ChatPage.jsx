@@ -1,84 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
-import { User, Send } from 'react-feather'
-import './ChatPage.css'
+import React, { useState, useEffect, useRef } from 'react';
 
-const serverUrl = import.meta.env.VITE_BASE_URL;
-
-const ChatPage = () => {
+const ChatPage = ({ loggedInUser, chatId, serverUrl }) => {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [LastMessage, setLastMessage] = useState("");
-  const { chatId } = useParams();
-  const location = useLocation();
-  const loggedInUser = JSON.parse(localStorage.getItem("user"));
-  const { friendName } = location.state || {};
-  const messagesContainerRef = useRef(null);
-  const messagesEndRef = useRef(null);
-  const [autoScroll, setAutoScroll] = useState(true);
+  const [newMessage, setNewMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
   const inputRef = useRef(null);
-  // Authentication check
-  if (!localStorage.getItem("isAuthenticated")) {
-    window.location.href = "/login";
-  }
-
-  // Fetch messages for current chat
-  const fetchMessages = async () => {
-    try {
-      const response = await fetch(`${serverUrl}/getMessages?chatId=${chatId}`);
-      const data = await response.json();
-      setMessages(data);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
 
   useEffect(() => {
-      const handleTouchStart = (event) => {
-        if (inputRef.current && event.target !== inputRef.current) {
-          event.preventDefault(); // Prevents losing focus
-        }
-      };
-
-      document.addEventListener("touchstart", handleTouchStart, { passive: false });
-
-      return () => {
-        document.removeEventListener("touchstart", handleTouchStart);
-      };
+    inputRef.current?.focus();
   }, []);
 
-
   useEffect(() => {
-    fetchMessages();
-    const interval = setInterval(fetchMessages, 1000);
-    return () => clearInterval(interval);
-  }, [chatId]);
+    const handleTouchStart = (event) => {
+      const isBackButton = event.target.closest('.back-button');
+      if (!isBackButton && inputRef.current && event.target !== inputRef.current) {
+        event.preventDefault();
+        inputRef.current.focus();
+      }
+    };
 
-  // Scroll to bottom only if autoScroll is enabled
-  useEffect(() => {
-    if (autoScroll) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-    }
-  }, [messages]);
-
-  // Detect user scrolling
-  const handleScroll = () => {
-    const container = messagesContainerRef.current;
-    if (!container) return;
-
-    const { scrollTop, clientHeight, scrollHeight } = container;
-
-    // If user scrolls up, disable auto-scroll
-    if (scrollHeight - scrollTop > clientHeight + 50) {
-      setAutoScroll(false);
-    } else {
-      setAutoScroll(true);
-    }
-  };
+    document.addEventListener("touchstart", handleTouchStart, { passive: false });
+    return () => {
+      document.removeEventListener("touchstart", handleTouchStart);
+    };
+  }, []);
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || isSending) return;
 
+    setIsSending(true);
     const newMsg = {
       text: newMessage,
       uid: loggedInUser.uid,
@@ -95,84 +45,42 @@ const ChatPage = () => {
 
       if (response.ok) {
         setNewMessage("");
-
-       
+        inputRef.current?.focus(); // Refocus after sending
       }
     } catch (error) {
       console.error("Error adding message:", error);
-    }
-  };
-
-  const handleDeleteMessage = async (messageId) => {
-    try {
-      const response = await fetch(`${serverUrl}/deleteMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatId, messageId }), // Pass the messageId here
-      });
-
-      if (response.ok) {
-        // Fetch updated messages after deletion
-        await fetchMessages();
-      } else {
-        console.error("Failed to delete message:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting message:", error);
+    } finally {
+      setIsSending(false);
     }
   };
 
   return (
-    <div className="chat-container">
-      <div className="header">
-        <div className="back-button" onClick={() => window.history.back()}>
-          {"<"} Back
-        </div>
-        <User className="mr-2" /> Chat with {friendName || "Friend"}
-      </div>
-
-      <div
-        className="messages"
-        ref={messagesContainerRef}
-        onScroll={handleScroll}
-      >
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`message ${msg.uid === loggedInUser.uid ? "me" : "other"}`}
-          >
-            <div className="message-text">{msg.text}</div>
-            <div className="message-time">
-              {new Date(msg.timestamp).toLocaleTimeString()}
-            </div>
-            <div className="deleteMessage">
-              {msg.uid === loggedInUser.uid && (
-                <button
-                  onClick={() => handleDeleteMessage(msg.id)}
-                  className="delete-button"
-                >
-                  Delete
-                </button>
-              )}
-            </div>
+    <div className="chat-page">
+      <div className="messages-container">
+        {messages.map((message, index) => (
+          <div key={index} className="message">
+            {message.text}
           </div>
         ))}
-
-        <div ref={messagesEndRef} />
       </div>
-
-      <div className="input-box">
+      
+      <div className="input-container">
         <input
           type="text"
           className="input"
           placeholder="Type a message..."
           value={newMessage}
           ref={inputRef}
+          autoFocus
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
-        <button onClick={handleSendMessage} className="send-button">
-          <Send size={20} />
+        <button 
+          className="send-button"
+          onClick={handleSendMessage}
+          disabled={isSending}
+        >
+          Send
         </button>
       </div>
     </div>
