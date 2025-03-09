@@ -34,6 +34,21 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
+      const handleTouchStart = (event) => {
+        if (inputRef.current && event.target !== inputRef.current) {
+          event.preventDefault(); // Prevents losing focus
+        }
+      };
+
+      document.addEventListener("touchstart", handleTouchStart, { passive: false });
+
+      return () => {
+        document.removeEventListener("touchstart", handleTouchStart);
+      };
+  }, []);
+
+
+  useEffect(() => {
     fetchMessages();
     const interval = setInterval(fetchMessages, 1000);
     return () => clearInterval(interval);
@@ -70,7 +85,7 @@ const ChatPage = () => {
       chatId: chatId,
       sender: loggedInUser.username,
     };
-    
+
     try {
       const response = await fetch(`${serverUrl}/sendMessage`, {
         method: "POST",
@@ -80,7 +95,7 @@ const ChatPage = () => {
 
       if (response.ok) {
         setNewMessage("");
-        
+
         await fetchMessages();
         setTimeout(() => {
           inputRef.current?.focus();
@@ -98,7 +113,7 @@ const ChatPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chatId, messageId }), // Pass the messageId here
       });
-  
+
       if (response.ok) {
         // Fetch updated messages after deletion
         await fetchMessages();
