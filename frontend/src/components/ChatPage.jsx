@@ -16,7 +16,7 @@ const ChatPage = () => {
   const messagesContainerRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [autoScroll, setAutoScroll] = useState(true);
-
+  const inputRef = useRef(null);
   // Authentication check
   if (!localStorage.getItem("isAuthenticated")) {
     window.location.href = "/login";
@@ -70,7 +70,7 @@ const ChatPage = () => {
       chatId: chatId,
       sender: loggedInUser.username,
     };
-
+    
     try {
       const response = await fetch(`${serverUrl}/sendMessage`, {
         method: "POST",
@@ -80,7 +80,11 @@ const ChatPage = () => {
 
       if (response.ok) {
         setNewMessage("");
+        
         await fetchMessages();
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
       }
     } catch (error) {
       console.error("Error adding message:", error);
@@ -151,6 +155,7 @@ const ChatPage = () => {
           className="input"
           placeholder="Type a message..."
           value={newMessage}
+          ref={inputRef}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
