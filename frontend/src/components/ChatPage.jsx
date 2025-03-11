@@ -1,22 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
-import { User, Send } from 'react-feather'
-import './ChatPage.css'
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import { User, Send } from 'react-feather';
+import { useNavigate } from 'react-router-dom';
+import './ChatPage.css';
 
 const serverUrl = import.meta.env.VITE_BASE_URL;
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [LastMessage, setLastMessage] = useState("");
+  const [autoScroll, setAutoScroll] = useState(true);
   const { chatId } = useParams();
   const location = useLocation();
-  const loggedInUser = JSON.parse(localStorage.getItem("user"));
-  const { friendName } = location.state || {};
   const messagesContainerRef = useRef(null);
   const messagesEndRef = useRef(null);
-  const [autoScroll, setAutoScroll] = useState(true);
   const inputRef = useRef(null);
+  const navigate = useNavigate();
+  // Pull friend name from route state
+  const { friendName } = location.state || {};
+
+  // Retrieve logged-in user data
+  const loggedInUser = JSON.parse(localStorage.getItem("user"));
+
   // Authentication check
   if (!localStorage.getItem("isAuthenticated")) {
     window.location.href = "/login";
@@ -33,36 +38,40 @@ const ChatPage = () => {
     }
   };
 
-  // Fetch messages on initial load
+const [friends, setFriends] = useState([]);
+
+useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user")); // Get logged-in user data
+    fetch(`${serverUrl}/friendsFile`)
+      .then((response) => response.json())
+      .then((friendList) => {
+        // Filter friends to show only those added by the logged-in user
+        const userFriends = friendList.filter(friend => friend.user === loggedInUser.username);
+        setFriends(userFriends);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  // Fetch messages on initial load & periodically
   useEffect(() => {
     fetchMessages();
     const interval = setInterval(fetchMessages, 1000);
     return () => clearInterval(interval);
   }, [chatId]);
 
-
-
-
-  useEffect(() => {
-    fetchMessages();
-    const interval = setInterval(fetchMessages, 1000);
-    return () => clearInterval(interval);
-  }, [chatId]);
-
-  // Scroll to bottom only if autoScroll is enabled
+  // Scroll to bottom if autoScroll is enabled
   useEffect(() => {
     if (autoScroll) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
     }
   }, [messages]);
 
-  // Detect user scrolling
+  // Detect user scrolling to toggle autoScroll
   const handleScroll = () => {
     const container = messagesContainerRef.current;
     if (!container) return;
 
     const { scrollTop, clientHeight, scrollHeight } = container;
-
     // If user scrolls up, disable auto-scroll
     if (scrollHeight - scrollTop > clientHeight + 50) {
       setAutoScroll(false);
@@ -71,6 +80,7 @@ const ChatPage = () => {
     }
   };
 
+  // Send a new message
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -90,25 +100,23 @@ const ChatPage = () => {
 
       if (response.ok) {
         setNewMessage("");
-
         await fetchMessages();
-       
       }
     } catch (error) {
-      console.error("Error adding message:", error);
+      console.error("Error sending message:", error);
     }
   };
 
+  // Delete a message
   const handleDeleteMessage = async (messageId) => {
     try {
       const response = await fetch(`${serverUrl}/deleteMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatId, messageId }), // Pass the messageId here
+        body: JSON.stringify({ chatId, messageId }),
       });
 
       if (response.ok) {
-        // Fetch updated messages after deletion
         await fetchMessages();
       } else {
         console.error("Failed to delete message:", response.statusText);
@@ -118,50 +126,79 @@ const ChatPage = () => {
     }
   };
 
+  const cp = (friendUID, friendUsername) => {
+
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    const chatId = [loggedInUser.uid, friendUID].sort().join('_');
+    navigate(`/chat/${chatId}`, {
+      state: {
+        friendName: friendUsername,
+        chatId: chatId
+      }
+    });
+  }
+
+
   return (
-    <div className="chat-container">
-      <div className="header">
-        <div className="back-button" onClick={() => window.history.back()}>
-          {"<"} Back
-        </div>
-        <User className="mr-2" /> Chat with {friendName || "Friend"}
+    <div className="chat-page-container">
+      {/* Top row of friend tabs */}
+      {/* Header: Chatting with friend name */}
+      <div className="chat-header">
+        <User className="user-icon" /> 
+        Chatting With {friendName || "Friend"}
       </div>
 
-      <div
-        className="messages"
-        ref={messagesContainerRef}
+     <div className="friend-bar-main">
+
+      {friends.map((friend) => (
+        <div key={friend.uid} className="friends-bar">
+        <div onClick={() => cp(friend.uid, friend.username)
+        } className="friend-tab active">{friend.username}</div>
+        </div>
+      
+    ))}
+    </div>
+
+
+      {/* Main messages area */}
+      <div 
+        className="chat-content" 
+        ref={messagesContainerRef} 
         onScroll={handleScroll}
       >
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`message ${msg.uid === loggedInUser.uid ? "me" : "other"}`}
+            className={`message-bubble ${
+              msg.uid === loggedInUser.uid ? "right" : "left"
+            }`}
           >
             <div className="message-text">{msg.text}</div>
             <div className="message-time">
               {new Date(msg.timestamp).toLocaleTimeString()}
             </div>
-            <div className="deleteMessage">
-              {msg.uid === loggedInUser.uid && (
+            {msg.uid === loggedInUser.uid && (
+              <div className="deleteMessage">
                 <button
                   onClick={() => handleDeleteMessage(msg.id)}
                   className="delete-button"
                 >
                   Delete
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         ))}
-
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="input-box">
+      {/* Bottom row: Section 3, message input, and send button */}
+      <div className="chat-footer">
+        
         <input
           type="text"
-          className="input"
-          placeholder="Type a message..."
+          className="message-input"
+          placeholder="Your Message Here"
           value={newMessage}
           ref={inputRef}
           onChange={(e) => setNewMessage(e.target.value)}
