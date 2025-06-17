@@ -11,13 +11,15 @@ import Friend from './models/Friend.js';
 import Admin from './models/Admin.js';
 
 
+// in user remove there is error in admin page  , endpoint /removeuser is not working : problem in uid and find one and delete query of mongoDB. 
+
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const MongoDB_URI = "mongodb+srv://amansharmayt19:nvrQpvCAPAWSEh9C@scripterx.7nhap.mongodb.net/ChatIT?retryWrites=true&w=majority&appName=ScripterX";
+const MongoDB_URI = "mongodb+srv://amansharmayt19:amansharma19@scripterx.7nhap.mongodb.net/ChatIT?retryWrites=true&w=majority&appName=ScripterX";
 
 // Connect to MongoDB
 mongoose.connect(MongoDB_URI, {
@@ -57,6 +59,8 @@ app.post('/register', async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
+
+
 
 // 📌 Login a user
 app.post('/login', async (req, res) => {
@@ -269,13 +273,13 @@ app.get('/friendsFile', async (req, res) => {
 
 app.post("/removeuser", async (req, res) => {
     try {
-        const { username } = req.body;
+        const { username , uid} = req.body;
 
         if (!username) {
             return res.status(400).json({ message: ' username is required' });
         }
 
-        const deleteduser = await User.findOneAndDelete({ username });
+        const deleteduser = await User.findAndDelete({ username ,uid});
 
         if (!deleteduser) {
             return res.status(404).json({ message: 'Friend not found' });

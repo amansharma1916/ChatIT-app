@@ -22,7 +22,7 @@ function AdminPage() {
       })
       .catch((error) => console.error("Error fetching data:", error));
   }
-  
+
   useEffect(() => {
     fetchData();
     const interval = setInterval(fetchData, 500);
@@ -50,18 +50,18 @@ function AdminPage() {
     navigate("/adminlogin");
   };
 
-  const handelremove = async (username) => {
+  const handelremove = async (username , uid) => {
     try {
-      const response = await fetch(`${serverUrl}/removeuser`, {  // Add 'await' here
+      const response = await fetch(`${serverUrl}/removeuser`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username , uid}),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         setpendingusers((prevUsers) => prevUsers.filter((user) => user.username !== username));
         setallusers((prevUsers) => prevUsers.filter((user) => user.username !== username));
@@ -73,7 +73,7 @@ function AdminPage() {
       console.error("Error:", error);
     }
   };
-  
+
   const handelapprove = async (username) => {
     try {
       const response = await fetch(`${serverUrl}/approveuser`, {
@@ -83,9 +83,9 @@ function AdminPage() {
         },
         body: JSON.stringify({ username }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         setpendingusers((prevUsers) => prevUsers.filter((user) => user.username !== username));
         setallusers((prevUsers) => [...prevUsers, data]);
@@ -101,8 +101,8 @@ function AdminPage() {
   return (
     <div className="admin-page">
       <header className="admin-header">
-      <button onClick={handleLogout} className="logout-button">
-          Logout 
+        <button onClick={handleLogout} className="logout-button">
+          Logout
         </button>
         <div className="admin-info">{admin.username}</div>
         <div className="online-info">Current Online: xx</div>
@@ -115,8 +115,10 @@ function AdminPage() {
           {approvedusers.map((user) => (
             <div key={user.uid} className="user-item">
               <span>{user.username}</span>
-              <button onClick={(e)=>{e.stopPropagation();
-                  handelremove(user.username)}} className="remove-btn">×</button>
+              <button onClick={(e) => {
+                e.stopPropagation();
+                handelremove(user.username , user.uid)
+              }} className="remove-btn">×</button>
             </div>
           ))}
 
@@ -128,9 +130,11 @@ function AdminPage() {
             <div key={user.uid} className="user-item">
               <span>{user.username}</span>
               <div className="a-r-btn">
-                <button onClick={()=>{handelapprove(user.username)}} className="accept-btn">✔️</button>
-                <button onClick={(e)=>{e.stopPropagation();
-                  handelremove(user.username)}} className="remove-btn">×</button>
+                <button onClick={() => { handelapprove(user.username , user.uid) }} className="accept-btn">✔️</button>
+                <button onClick={(e) => {
+                  e.stopPropagation();
+                  handelremove(user.username , user.uid)
+                }} className="remove-btn">×</button>
               </div>
             </div>
           ))}
@@ -143,8 +147,10 @@ function AdminPage() {
               <span>{user.username}</span>
               {/* <span>{user.email}</span> */}
               <span>{user.userstatus == "approved" ? "✅" : "❌"}</span>
-              <button onClick={(e)=>{e.stopPropagation();
-                  handelremove(user.username)}} className="remove-btn">×</button>
+              <button onClick={(e) => {
+                e.stopPropagation();
+                handelremove(user.username , user.uid)
+              }} className="remove-btn">×</button>
             </div>
           ))}
         </aside>
