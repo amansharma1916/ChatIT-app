@@ -283,7 +283,7 @@ app.post("/removeuser", async (req, res) => {
             return res.status(400).json({ message: ' username is required' });
         }
 
-        const deleteduser = await User.findAndDelete({ username ,uid});
+        const deleteduser = await User.findOneAndDelete({ username ,uid});
 
         if (!deleteduser) {
             return res.status(404).json({ message: 'Friend not found' });
