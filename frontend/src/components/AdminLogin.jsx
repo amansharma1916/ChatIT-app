@@ -28,7 +28,7 @@ function AdminLogin() {
       );
 
       const admins = await response.json();
-      console.log("Server response:", admins);
+      
 
       if (admins && admins.length > 0) {
         console.log("Admin login successful");
