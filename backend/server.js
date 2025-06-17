@@ -60,6 +60,10 @@ app.post('/register', async (req, res) => {
     }
 });
 
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
 
 
 // 📌 Login a user
@@ -314,5 +318,6 @@ app.post("/approveuser", async (req, res) => {
 /* ────────────────────────────────────────────
    ✅ SERVER SETUP
    ──────────────────────────────────────────── */
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(5000, () => {
+  console.log("🚀 Server running on http://localhost:5000");
+});
