@@ -9,14 +9,7 @@
 
 ---
 
-## 📸 Preview
-
-> *(Replace these with your actual screenshots or GIFs)*
-
-![Login Page](https://chat-it-app.vercel.app/)
-![Chat UI](https://chat-it-app.vercel.app/)
-
----
+Link : - [chat-it](https://chat-it-app.vercel.app/)
 
 ## 🚀 Features
 
