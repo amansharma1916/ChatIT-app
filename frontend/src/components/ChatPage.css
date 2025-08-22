@@ -147,6 +147,15 @@
   .chat-header {
     font-size: 14px;
     padding: 8px 10px;
+    
+  }
+
+  .chat-page-container{
+    max-height: 80dvh;
+    max-width: 90dvw;
+    margin-top: -15dvh;
+    overflow: hidden;
+    font-size: 2rem;
   }
 
   .user-icon {
@@ -167,11 +176,12 @@
   .chat-content {
     padding: 10px;
     gap: 6px;
+    
   }
 
   .message-bubble {
     max-width: 80%;
-    font-size: 12px;
+    font-size: 15px;
     padding: 8px 10px;
     border-radius: 10px;
   }
