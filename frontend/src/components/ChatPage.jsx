@@ -8,18 +8,15 @@ const serverUrl = import.meta.env.VITE_BASE_URL;
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [autoScroll, setAutoScroll] = useState(true);
 
   const { chatId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
   const messagesContainerRef = useRef(null);
-  const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
   const { friendName } = location.state || {};
-
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
 
   if (!localStorage.getItem("isAuthenticated")) {
@@ -31,7 +28,7 @@ const ChatPage = () => {
     try {
       const response = await fetch(`${serverUrl}/getMessages?chatId=${chatId}`);
       const data = await response.json();
-      setMessages(data);
+      setMessages(data.reverse()); // show latest at bottom
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -58,27 +55,6 @@ const ChatPage = () => {
     return () => clearInterval(interval);
   }, [chatId]);
 
-  // FIXED AUTO SCROLLING
-  useEffect(() => {
-    if (autoScroll) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
-  // Detect user scrolling
-  const handleScroll = () => {
-    const container = messagesContainerRef.current;
-    if (!container) return;
-
-    const { scrollTop, clientHeight, scrollHeight } = container;
-    // If user is NOT at bottom, disable auto-scroll
-    if (scrollHeight - (scrollTop + clientHeight) > 50) {
-      setAutoScroll(false);
-    } else {
-      setAutoScroll(true);
-    }
-  };
-
   // Send message
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -100,9 +76,6 @@ const ChatPage = () => {
       if (response.ok) {
         setNewMessage("");
         await fetchMessages();
-        setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 100); // ensure scroll after DOM update
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -157,11 +130,7 @@ const ChatPage = () => {
       </div>
 
       {/* Chat messages */}
-      <div
-        className="chat-content"
-        ref={messagesContainerRef}
-        onScroll={handleScroll}
-      >
+      <div className="chat-content" ref={messagesContainerRef}>
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -185,7 +154,6 @@ const ChatPage = () => {
             )}
           </div>
         ))}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Footer */}

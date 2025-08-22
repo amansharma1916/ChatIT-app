@@ -61,7 +61,7 @@
   padding: 16px;
   overflow-y: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 10px;
 }
 
@@ -152,7 +152,7 @@
   }
 
   .chat-page-container{
-    max-height: 100dvh;
+    max-height: 90dvh;
     max-width: 90dvw;
     margin-top: 8dvh;
     overflow: hidden;
@@ -175,8 +175,10 @@
   }
 
   .chat-content {
+    flex: 1;
     padding: 10px;
     gap: 6px;
+    
     
   }
 
