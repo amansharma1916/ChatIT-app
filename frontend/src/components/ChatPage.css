@@ -154,7 +154,7 @@
   .chat-page-container{
     max-height: 80dvh;
     max-width: 90dvw;
-    margin-top: -10dvh;
+    margin-top: -8dvh;
     overflow: hidden;
     font-size: 2rem;
   }
