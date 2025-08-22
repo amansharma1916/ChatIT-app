@@ -2,8 +2,8 @@
 .chat-page-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: #f9fafb;
+  height: 90vh;
+  background: #ffffff;
   color: #111827;
   overflow: hidden;
 }
@@ -126,7 +126,7 @@
   border-radius: 20px;
   border: 1px solid #d1d5db;
   outline: none;
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .send-button {
@@ -203,12 +203,14 @@
 
   .chat-footer {
     padding: 6px 8px;
+    margin-bottom: 10px;
   }
 
   .message-input {
-    font-size: 12px;
+    font-size: 20px;
     padding: 8px 10px;
     border-radius: 16px;
+    
   }
 
   .send-button {
