@@ -5,6 +5,7 @@
   height: 100vh;
   background: #f9fafb;
   color: #111827;
+  overflow: hidden;
 }
 
 /* HEADER */
@@ -154,7 +155,8 @@
   .chat-page-container{
     max-height: 90dvh;
     max-width: 90dvw;
-    margin-top: 8dvh;
+    margin-top: 5dvh;
+    margin-bottom: 5dvh;
     overflow: hidden;
     font-size: 2rem;
   }
