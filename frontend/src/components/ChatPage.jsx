@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { User, Send } from 'react-feather';
-import { useNavigate } from 'react-router-dom';
 import './ChatPage.css';
 
 const serverUrl = import.meta.env.VITE_BASE_URL;
@@ -10,24 +9,24 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [autoScroll, setAutoScroll] = useState(true);
+
   const { chatId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
+
   const messagesContainerRef = useRef(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const navigate = useNavigate();
-  // Pull friend name from route state
+
   const { friendName } = location.state || {};
 
-  // Retrieve logged-in user data
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
 
-  // Authentication check
   if (!localStorage.getItem("isAuthenticated")) {
     window.location.href = "/login";
   }
 
-  // Fetch messages for current chat
+  // Fetch messages
   const fetchMessages = async () => {
     try {
       const response = await fetch(`${serverUrl}/getMessages?chatId=${chatId}`);
@@ -38,49 +37,49 @@ const ChatPage = () => {
     }
   };
 
-const [friends, setFriends] = useState([]);
+  const [friends, setFriends] = useState([]);
 
-useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem("user")); // Get logged-in user data
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
     fetch(`${serverUrl}/friendsFile`)
       .then((response) => response.json())
       .then((friendList) => {
-        // Filter friends to show only those added by the logged-in user
-        const userFriends = friendList.filter(friend => friend.user === loggedInUser.username);
+        const userFriends = friendList.filter(
+          (friend) => friend.user === loggedInUser.username
+        );
         setFriends(userFriends);
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  // Fetch messages on initial load & periodically
   useEffect(() => {
     fetchMessages();
     const interval = setInterval(fetchMessages, 1000);
     return () => clearInterval(interval);
   }, [chatId]);
 
-  // Scroll to bottom if autoScroll is enabled
+  // FIXED AUTO SCROLLING
   useEffect(() => {
     if (autoScroll) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
-  // Detect user scrolling to toggle autoScroll
+  // Detect user scrolling
   const handleScroll = () => {
     const container = messagesContainerRef.current;
     if (!container) return;
 
     const { scrollTop, clientHeight, scrollHeight } = container;
-    // If user scrolls up, disable auto-scroll
-    if (scrollHeight - scrollTop > clientHeight + 50) {
+    // If user is NOT at bottom, disable auto-scroll
+    if (scrollHeight - (scrollTop + clientHeight) > 50) {
       setAutoScroll(false);
     } else {
       setAutoScroll(true);
     }
   };
 
-  // Send a new message
+  // Send message
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -101,13 +100,16 @@ useEffect(() => {
       if (response.ok) {
         setNewMessage("");
         await fetchMessages();
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100); // ensure scroll after DOM update
       }
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
-  // Delete a message
+  // Delete message
   const handleDeleteMessage = async (messageId) => {
     try {
       const response = await fetch(`${serverUrl}/deleteMessage`, {
@@ -118,8 +120,6 @@ useEffect(() => {
 
       if (response.ok) {
         await fetchMessages();
-      } else {
-        console.error("Failed to delete message:", response.statusText);
       }
     } catch (error) {
       console.error("Error deleting message:", error);
@@ -127,43 +127,39 @@ useEffect(() => {
   };
 
   const cp = (friendUID, friendUsername) => {
-
     const loggedInUser = JSON.parse(localStorage.getItem("user"));
-    const chatId = [loggedInUser.uid, friendUID].sort().join('_');
+    const chatId = [loggedInUser.uid, friendUID].sort().join("_");
     navigate(`/chat/${chatId}`, {
-      state: {
-        friendName: friendUsername,
-        chatId: chatId
-      }
+      state: { friendName: friendUsername, chatId: chatId },
     });
-  }
-
+  };
 
   return (
     <div className="chat-page-container">
-      {/* Top row of friend tabs */}
-      {/* Header: Chatting with friend name */}
+      {/* Header */}
       <div className="chat-header">
-        <User className="user-icon" /> 
+        <User className="user-icon" />
         Chatting With {friendName || "Friend"}
       </div>
 
-     <div className="friend-bar-main">
+      {/* Friend bar */}
+      <div className="friend-bar-main">
+        {friends.map((friend) => (
+          <div key={friend.uid} className="friends-bar">
+            <div
+              onClick={() => cp(friend.uid, friend.username)}
+              className="friend-tab active"
+            >
+              {friend.username}
+            </div>
+          </div>
+        ))}
+      </div>
 
-      {friends.map((friend) => (
-        <div key={friend.uid} className="friends-bar">
-        <div onClick={() => cp(friend.uid, friend.username)
-        } className="friend-tab active">{friend.username}</div>
-        </div>
-      
-    ))}
-    </div>
-
-
-      {/* Main messages area */}
-      <div 
-        className="chat-content" 
-        ref={messagesContainerRef} 
+      {/* Chat messages */}
+      <div
+        className="chat-content"
+        ref={messagesContainerRef}
         onScroll={handleScroll}
       >
         {messages.map((msg) => (
@@ -192,9 +188,8 @@ useEffect(() => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Bottom row: Section 3, message input, and send button */}
+      {/* Footer */}
       <div className="chat-footer">
-        
         <input
           type="text"
           className="message-input"
